@@ -3,6 +3,14 @@
   It doesn't do much, except creating Main and taking care of app speed ()
 **/
 
+import shaders.ModeSevShader;
+import shaders.CompositeShader;
+import h3d.Vector;
+import shaders.ColorShader;
+import h3d.pass.ScreenFx;
+import h3d.shader.ScreenShader;
+import h3d.mat.Texture;
+import h3d.mat.TextureArray;
 import h3d.Engine;
 import renderer.CustomRenderer;
 import dn.heaps.Controller;
@@ -12,6 +20,7 @@ class Boot extends hxd.App {
   public static var ME:Boot;
 
   public var renderer:CustomRenderer;
+  public var mode7:ModeSevShader;
 
   #if debug
   var tmodSpeedMul = 1.0;
@@ -36,6 +45,12 @@ class Boot extends hxd.App {
     renderer = new CustomRenderer();
     s3d.renderer = renderer;
     new Main(s2d);
+    var ground = hxd.Res.textures.WhiteLand.toTexture();
+    ground.wrap = Repeat;
+    var sky = hxd.Res.textures.SkyTexTwo.toTexture();
+    sky.wrap = Repeat;
+    mode7 = new ModeSevShader(ground);
+    mode7.skyTexture = sky;
     onResize();
   }
 
@@ -72,6 +87,38 @@ class Boot extends hxd.App {
 
   @:access(h3d.scene.Scene, h3d.scene.Renderer, CustomRenderer)
   override function render(e:Engine) {
-    super.render(e);
+    // Grab Render Texture for the 2D scene so that can make modifications
+    var renderTarget = new Texture(engine.width, engine.height, [Target]);
+    // Composite Shader
+    var compShader = new CompositeShader(new TextureArray(engine.width,
+      engine.height, 3, [Target]));
+    engine.pushTarget(compShader.textures, 2);
+    engine.clear(0, 1);
+
+    // Disable level snow before render texture screen shader pass
+    if (Game.ME != null && Game.ME.level != null) {
+      var level = Game.ME.level;
+      Game.ME.scroller.visible = true;
+      level.snow.visible = false;
+    }
+    s2d.render(e);
+    engine.popTarget();
+    // Dsiable level before rendering snow
+    if (Game.ME != null && Game.ME.level != null) {
+      var level = Game.ME.level;
+      level.snow.visible = true;
+      Game.ME.scroller.visible = false;
+    }
+    engine.pushTarget(compShader.textures, 1);
+    engine.clear(0, 1);
+    s2d.render(e);
+    engine.popTarget();
+    var shader = mode7;
+    // shader.worldPos.y += 0.0009;
+    // shader.worldPos.x -= 0.01;
+    ScreenFx.run(shader, compShader.textures, 0);
+
+    // Compsite for all textures passed into the texture array
+    new ScreenFx(compShader).render();
   }
 }

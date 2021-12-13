@@ -1,6 +1,7 @@
 import dn.Process;
 import hxd.Key;
 import dn.heaps.Controller.ControllerAccess;
+import scn.Level;
 
 class Game extends dn.Process {
   public static var ME:Game;

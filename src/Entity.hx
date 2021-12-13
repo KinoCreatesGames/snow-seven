@@ -1,3 +1,5 @@
+import scn.Level;
+
 class Entity {
   public static var ALL:Array<Entity> = [];
   public static var GC:Array<Entity> = [];

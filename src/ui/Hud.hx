@@ -1,5 +1,7 @@
 package ui;
 
+import scn.Level;
+
 class Hud extends dn.Process {
   public var game(get, never):Game;
 

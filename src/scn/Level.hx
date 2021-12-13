@@ -1,3 +1,12 @@
+package scn;
+
+import en.Player;
+import particles.Snow2D;
+
+/**
+ * Base level for the game that contains most of the setup
+ * for any unique levels within the game.
+ */
 class Level extends dn.Process {
   var game(get, never):Game;
 
@@ -35,9 +44,36 @@ class Level extends dn.Process {
 
   var invalidated = true;
 
+  // Game specific variables
+  public var snow:Snow2D;
+
+  public var player:Player;
+
   public function new() {
     super(Game.ME);
     createRootInLayers(Game.ME.scroller, Const.DP_BG);
+    setup();
+  }
+
+  public function setup() {
+    setupEntities();
+    setupCollectibles();
+    setupSnow();
+  }
+
+  public function setupEntities() {
+    createPlayer();
+  }
+
+  public function createPlayer() {
+    player = new Player(8, 12);
+  }
+
+  public function setupCollectibles() {}
+
+  public function setupSnow() {
+    var snowRoot = Boot.ME.s2d;
+    snow = new Snow2D(snowRoot, hxd.Res.textures.SnowTex.toTexture());
   }
 
   /** TRUE if given coords are in level bounds **/
@@ -55,17 +91,17 @@ class Level extends dn.Process {
 
   function render() {
     // Placeholder level render
-    root.removeChildren();
-    for (cx in 0...cWid)
-      for (cy in 0...cHei) {
-        var g = new h2d.Graphics(root);
-        if (cx == 0
-          || cy == 0
-          || cx == cWid - 1
-          || cy == cHei - 1) g.beginFill(0xffcc00); else
-          g.beginFill(Color.randomColor(rnd(0, 1), 0.5, 0.4));
-        g.drawRect(cx * Const.GRID, cy * Const.GRID, Const.GRID, Const.GRID);
-      }
+    // root.removeChildren();
+    // for (cx in 0...cWid)
+    //   for (cy in 0...cHei) {
+    //     var g = new h2d.Graphics(root);
+    //     if (cx == 0
+    //       || cy == 0
+    //       || cx == cWid - 1
+    //       || cy == cHei - 1) g.beginFill(0xffcc00); else
+    //       g.beginFill(Color.randomColor(rnd(0, 1), 0.5, 0.4));
+    //     g.drawRect(cx * Const.GRID, cy * Const.GRID, Const.GRID, Const.GRID);
+    //   }
   }
 
   override function postUpdate() {
