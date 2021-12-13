@@ -31,6 +31,12 @@ class Entity {
   inline function get_tmod()
     return Game.ME.tmod;
 
+  public var dt(get, null):Float;
+
+  public inline function get_dt() {
+    return hxd.Timer.dt;
+  }
+
   public var hud(get, never):ui.Hud;
 
   inline function get_hud()

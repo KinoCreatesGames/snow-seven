@@ -66,7 +66,7 @@ class Level extends dn.Process {
   }
 
   public function createPlayer() {
-    player = new Player(8, 12);
+    player = new Player(8, 13);
   }
 
   public function setupCollectibles() {}
