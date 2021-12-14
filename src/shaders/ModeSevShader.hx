@@ -47,7 +47,7 @@ class ModeSevShader extends ScreenShader {
     function fragment() {
       // https://en.wikipedia.org/wiki/Mode_7
       var uv = input.uv;
-      var horizon = 0.2;
+      var horizon = 0.1;
 
       // 3D Coordinates
       var result = uv;
@@ -97,7 +97,7 @@ class ModeSevShader extends ScreenShader {
     this.worldPos = new Vector(0.5, .0);
     this.viewA = (90 * 3.14) / 180;
     this.near = 0.0025;
-    this.far = 0.030;
+    this.far = 0.030; // 0.030
     this.fov = 3.14 / 4;
   }
 }

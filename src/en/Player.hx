@@ -88,9 +88,19 @@ class Player extends Entity {
   }
 
   public function setupCharacter() {
+    var shadowG = new h2d.Graphics(spr);
+    var shadowT = hxd.Res.img.shadow.toTile();
+    shadowG.beginTileFill(0, 0, 1, 1, shadowT);
+    shadowG.drawRect(0, 0, 32, 32);
+    shadowG.scale(2);
+    shadowG.endFill();
+    shadowG.blendMode = Alpha;
+    shadowG.alpha = 0.7;
     var g = new h2d.Graphics(spr);
-    g.beginFill(0xffaaff);
-    g.drawRect(0, 0, 16, 16);
+    var t = hxd.Res.img.ship.toTile();
+    g.beginTileFill(0, 0, 1, 1, t);
+    g.drawRect(0, 0, 32, 32);
+    g.scale(2);
     g.endFill();
   }
 

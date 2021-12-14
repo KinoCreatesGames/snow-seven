@@ -20,11 +20,13 @@ class CompositeShader extends ScreenShader {
      */
     function fragment() {
       var texColor = textures.get(vec3(input.uv, 0));
+      // Snow
       var texTwo = textures.get(vec3(input.uv, 1));
+      // Characters
       var texThree = textures.get(vec3(input.uv, 2));
       var result = texColor + texTwo;
       if (texThree.r > 0.1) {
-        result = texThree;
+        result = texThree + texTwo;
       }
       pixelColor = result;
     }
