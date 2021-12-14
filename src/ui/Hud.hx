@@ -21,6 +21,8 @@ class Hud extends dn.Process {
   var flow:h2d.Flow;
   var invalidated = true;
 
+  public var scoreText:h2d.Text;
+
   public function new() {
     super(Game.ME);
 
@@ -28,6 +30,23 @@ class Hud extends dn.Process {
     root.filter = new h2d.filter.ColorMatrix(); // force pixel perfect rendering
 
     flow = new h2d.Flow(root);
+    createUIEl();
+  }
+
+  public function createUIEl() {
+    createScore();
+  }
+
+  public function createScore() {
+    scoreText = new h2d.Text(Assets.fontSmall, flow);
+    scoreText.text = 'Score 0';
+    scoreText.textColor = 0xffa0aa;
+    scoreText.dropShadow = {
+      dx: 0.2,
+      dy: 0.2,
+      alpha: 1,
+      color: 0xaaaaa
+    };
   }
 
   override function onResize() {
@@ -38,7 +57,15 @@ class Hud extends dn.Process {
   public inline function invalidate()
     invalidated = true;
 
-  function render() {}
+  function render() {
+    if (level != null && level.player != null) {
+      renderScore();
+    }
+  }
+
+  function renderScore() {
+    scoreText.text = 'Score ${level.player.score}';
+  }
 
   override function postUpdate() {
     super.postUpdate();

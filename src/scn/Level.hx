@@ -1,5 +1,6 @@
 package scn;
 
+import en.Tree;
 import en.Player;
 import particles.Snow2D;
 
@@ -51,6 +52,8 @@ class Level extends dn.Process {
 
   public var data:LDTkProj_Level;
 
+  public var objects:Group<Entity>;
+
   public function new(?level:LDTkProj_Level) {
     super(Game.ME);
     createRootInLayers(Game.ME.scroller, Const.DP_BG);
@@ -61,17 +64,31 @@ class Level extends dn.Process {
   }
 
   public function setup() {
+    setupGroups();
     setupEntities();
     setupCollectibles();
     setupSnow();
   }
 
+  public function setupGroups() {
+    objects = new Group<Entity>();
+  }
+
   public function setupEntities() {
     createPlayer();
+    createObjects();
   }
 
   public function createPlayer() {
     player = new Player(6, 10);
+  }
+
+  public function createObjects() {
+    // data.l_Entities.all_Tree.iter((tree) -> {
+    // var tree = data.l_Entities.all_Tree[0];
+    // var elTree = new Tree(tree);
+    // objects.add(elTree);
+    // });
   }
 
   public function setupCollectibles() {}

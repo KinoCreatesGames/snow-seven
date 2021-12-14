@@ -1,5 +1,6 @@
 package en;
 
+import h2d.col.Bounds;
 import particles.Drift2D;
 import h2d.col.Point;
 import h3d.Vector;
@@ -67,12 +68,29 @@ class Player extends Entity {
   public var driftParticles:Drift2D;
   public var driftOver = false;
 
+  /**
+   * Drift Multiplier.
+   * This multiplier goes up 
+   * the longer that you've been drifting for.
+   */
+  public var driftMultiplier:Float;
+
   // Drifting Controls
   public var isDrifting(get, null):Bool;
+
+  public var score:Int;
 
   public inline function get_isDrifting() {
     return !moveDir.equals(driftDir);
   }
+
+  // Frustrum for the game using shader information
+  // Far Clipping Plane
+  public var farL:Vector;
+  public var farR:Vector;
+  // Near Clipping Plane
+  public var nearL:Vector;
+  public var nearR:Vector;
 
   /**
    * Direction that the player is drifting in when moving
@@ -81,6 +99,8 @@ class Player extends Entity {
   public var driftDir:Point;
 
   public var angDir:Point;
+
+  public var worldPos:Point;
 
   public function new(x:Int, y:Int) {
     super(x, y);
@@ -137,10 +157,78 @@ class Player extends Entity {
 
   override function update() {
     super.update();
+    updateLevelVariables();
+    updateFrustrum();
     handleEffects();
     updateParticles();
     updateSnow();
     updateControls();
+  }
+
+  /**
+   * Updates Variables tha t
+   * are important to the game's 
+   * Core Scoring Mechanisms
+   */
+  public function updateLevelVariables() {
+    if (acceleration > 0) {
+      score += Std.int(1 * driftMultiplier);
+      hud.invalidate();
+    }
+    if (!isDrifting) {
+      driftMultiplier = 1;
+    } else {
+      driftMultiplier += 0.1;
+    }
+  }
+
+  public function updateFrustrum() {
+    var worldX = mode7.worldPos.x;
+    var worldY = mode7.worldPos.y;
+    worldPos = new Point(worldX, worldY);
+    var far = mode7.far;
+    var near = mode7.near;
+    var viewAngle = mode7.viewA;
+    var cos = Math.cos;
+    var sin = Math.sin;
+    var fov = mode7.fov;
+    farL = new Vector(worldX + cos(viewAngle - fov) * far,
+      worldY + sin(viewAngle - fov) * far);
+    farR = new Vector(worldX + cos(viewAngle + fov) * far,
+      worldY + sin(viewAngle + fov) * far);
+    nearL = new Vector(worldX + cos(viewAngle - fov) * near,
+      worldY + sin(viewAngle - fov) * near);
+    nearR = new Vector(worldX + cos(viewAngle + fov) * near,
+      worldY + sin(viewAngle + fov) * near);
+  }
+
+  public function withinFrustrum(entity:Entity) {
+    var pOne = new Point(farL.x, farL.y);
+    var pTwo = new Point(nearR.x, nearR.y);
+    var depth = 0.1;
+    var start = new Point((farL.x - nearL.x) / depth + nearL.x,
+      (farL.y - nearL.y) / depth + nearL.y);
+
+    var end = new Point((farR.x - nearR.x) / depth + nearR.x,
+      (farR.y - nearR.y) / depth + nearR.y);
+    var bBox = Bounds.fromPoints(start, end);
+    var bBoxFlip = Bounds.fromPoints(end, start);
+
+    // Normalize entity location on the map
+    var modeTex = mode7.texture;
+    var normLoc = new Point((entity.spr.x / modeTex.width),
+      (entity.spr.y / modeTex.height));
+
+    // trace(bBox.contains(normLoc));
+    // if (!cd.has('test')) {
+    //   cd.setS('test', 2, () -> {
+    //     trace('Box Information ${bBox.xMin} | ${bBox.xMax}');
+    //     trace('Box x: \n ${bBox.yMin} | ${bBox.yMax}');
+    //     trace('Normalized location ${normLoc.x} ---- ${normLoc.y}');
+    //   });
+    // }
+
+    return bBox.contains(normLoc) || bBoxFlip.contains(normLoc);
   }
 
   public function handleEffects() {

@@ -94,7 +94,7 @@ class ModeSevShader extends ScreenShader {
   public function new(texture:Texture) {
     super();
     this.texture = texture;
-    this.worldPos = new Vector(0.5, .0);
+    this.worldPos = new Vector(0.25, .3);
     this.viewA = (90 * 3.14) / 180;
     this.near = 0.0025;
     this.far = 0.030; // 0.030
