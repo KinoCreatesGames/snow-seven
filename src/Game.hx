@@ -24,6 +24,11 @@ class Game extends dn.Process {
   /** UI **/
   public var hud:ui.Hud;
 
+  /**
+   * Project file for LDtk in here.
+   */
+  public var proj:LDTkProj;
+
   public function new() {
     super(Main.ME);
     ME = this;
@@ -31,6 +36,8 @@ class Game extends dn.Process {
     ca.setLeftDeadZone(0.2);
     ca.setRightDeadZone(0.2);
     createRootInLayers(Main.ME.root, Const.DP_BG);
+
+    proj = new LDTkProj();
 
     scroller = new h2d.Layers();
     root.add(scroller, Const.DP_BG);
@@ -77,7 +84,7 @@ class Game extends dn.Process {
     trace('LDTk file reloaded');
     #else
     #end
-    // reloadCurrentLevel();
+    reloadCurrentLevel();
   }
 
   // Use the below lines when using LDTk for game creation.
@@ -95,27 +102,28 @@ class Game extends dn.Process {
   //     #end
   //   }
   // }
-  // public function reloadCurrentLevel() {
-  //   if (level != null) {
-  //     if (level.data != null) {
-  //       startLevel(Assets.projData.getLevel(level.data.uid));
-  //     }
-  //   }
-  // }
-  // public function startLevel(ldtkLevel:LDTkProj_Level, startX = -1,
-  //     startY = -1) {
-  //   if (level != null) {
-  //     level.destroy();
-  //   }
-  //   fx.clear();
-  //   for (entity in Entity.ALL) {
-  //     entity.destroy();
-  //   }
-  //   gc();
-  //   // Create new level
-  //   level = new Level(ldtkLevel, startX, startY);
-  //   // Will be using the looping mechanisms
-  // }
+  public function reloadCurrentLevel() {
+    if (level != null) {
+      if (level.data != null) {
+        startLevel(Assets.projData.getLevel(level.data.uid));
+      }
+    }
+  }
+
+  public function startLevel(ldtkLevel:LDTkProj_Level, startX = -1,
+      startY = -1) {
+    if (level != null) {
+      level.destroy();
+    }
+    fx.clear();
+    for (entity in Entity.ALL) {
+      entity.destroy();
+    }
+    gc();
+    // Create new level
+    level = new Level(ldtkLevel);
+    // Will be using the looping mechanisms
+  }
 
   /** Window/app resize event **/
   override function onResize() {

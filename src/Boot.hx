@@ -45,7 +45,7 @@ class Boot extends hxd.App {
     renderer = new CustomRenderer();
     s3d.renderer = renderer;
     new Main(s2d);
-    var ground = hxd.Res.textures.Mario.toTexture();
+    var ground = hxd.Res.textures.TestTrack.toTexture();
     ground.wrap = Repeat;
     var sky = hxd.Res.textures.SkyTexTwo.toTexture();
     sky.wrap = Repeat;

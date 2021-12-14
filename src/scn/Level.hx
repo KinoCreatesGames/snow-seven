@@ -49,9 +49,14 @@ class Level extends dn.Process {
 
   public var player:Player;
 
-  public function new() {
+  public var data:LDTkProj_Level;
+
+  public function new(?level:LDTkProj_Level) {
     super(Game.ME);
     createRootInLayers(Game.ME.scroller, Const.DP_BG);
+    if (level != null) {
+      data = level;
+    }
     setup();
   }
 
