@@ -12,6 +12,7 @@ enum abstract Flow(String) from String to String {
 }
 
 class TextureGauge {
+  public var root:h2d.Object;
   public var front:Bitmap;
   public var back:Bitmap;
   public var flowType:Flow;
@@ -25,10 +26,32 @@ class TextureGauge {
    */
   public var delta:Float = 1;
 
+  public var x(get, set):Int;
+  public var y(get, set):Int;
+
+  public function get_x() {
+    return Std.int(this.back.x);
+  }
+
+  public function set_x(value:Int) {
+    this.root.x = value;
+    return Std.int(this.root.x);
+  }
+
+  public function get_y() {
+    return Std.int(this.root.y);
+  }
+
+  public function set_y(value:Int) {
+    this.root.y = value;
+    return Std.int(this.root.y);
+  }
+
   public function new(front:Tile, back:Tile, parent) {
     this.flowType = RIGHT_LEFT;
-    this.back = new Bitmap(back, parent);
-    this.mask = new Mask(Std.int(front.width), Std.int(front.height), parent);
+    root = new h2d.Object(parent);
+    this.back = new Bitmap(back, root);
+    this.mask = new Mask(Std.int(front.width), Std.int(front.height), root);
     this.mask.scrollBounds = h2d.col.Bounds.fromValues(-mask.width / 2,
       -mask.height / 2, mask.width * 2, mask.height * 2);
     this.front = new Bitmap(front, mask);
