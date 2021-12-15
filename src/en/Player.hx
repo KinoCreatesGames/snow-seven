@@ -1,5 +1,6 @@
 package en;
 
+import hxd.snd.Channel;
 import h2d.col.Bounds;
 import particles.Drift2D;
 import h2d.col.Point;
@@ -80,6 +81,9 @@ class Player extends Entity {
 
   public var score:Int;
 
+  // Sounds
+  public var driftSound:Channel;
+
   public inline function get_isDrifting() {
     return !moveDir.equals(driftDir);
   }
@@ -157,6 +161,7 @@ class Player extends Entity {
 
   override function update() {
     super.update();
+    updateSounds();
     updateLevelVariables();
     updateFrustrum();
     handleEffects();
@@ -164,6 +169,8 @@ class Player extends Entity {
     updateSnow();
     updateControls();
   }
+
+  public function updateSounds() {}
 
   /**
    * Updates Variables tha t
@@ -234,10 +241,17 @@ class Player extends Entity {
   public function handleEffects() {
     if (isDrifting) {
       driftOver = false;
+
+      if (driftSound == null || driftSound.isReleased()) {
+        driftSound = hxd.Res.sound.tire_squal_loop.play(true);
+      }
     }
 
     if (driftOver == false && !isDrifting) {
       driftOver = true;
+      if (driftSound != null) {
+        driftSound.stop();
+      }
       setSquashX(0.6);
     }
   }

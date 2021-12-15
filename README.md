@@ -18,3 +18,10 @@ If you need some extra "advanced features", you can also give a try to the **adv
  * Level marks (can be useful for AI coding, for example by marking platform ends)
  * A few very basic extra UI components that should be useful for any game projects (like a Bar).
  * etc.
+
+
+# Credits
+
+## Audio
+
+- Tire Squal Loop - Audible-Edge (Tom Haigh) - https://opengameart.org/content/car-tire-squeal-skid-loop / http://www.tomhaigh.com/
