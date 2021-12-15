@@ -47,13 +47,12 @@ class ModeSevShader extends ScreenShader {
     function fragment() {
       // https://en.wikipedia.org/wiki/Mode_7
       var uv = input.uv;
-      var horizon = 0.1;
+      var horizon = 0.3;
 
       // 3D Coordinates
       var result = uv;
       var viewAngle = viewA;
-      // Add Looping of world
-      // Max Clip seems to be .75
+
       var worldY = worldPos.y;
       var worldX = worldPos.x;
       // Plane Coords Frustrum 2D Points
@@ -84,7 +83,7 @@ class ModeSevShader extends ScreenShader {
       var texColor = texture.get(result);
       if (uv.y < horizon) {
         result.y = (1 - sample.y);
-        texColor = skyTexture.get(result);
+        texColor = skyTexture.get(vec2(uv.x, uv.y / .4));
       }
 
       pixelColor = texColor;
@@ -96,8 +95,8 @@ class ModeSevShader extends ScreenShader {
     this.texture = texture;
     this.worldPos = new Vector(0.25, .3);
     this.viewA = (90 * 3.14) / 180;
-    this.near = 0.0025;
-    this.far = 0.030; // 0.030
-    this.fov = 3.14 / 4;
+    this.near = -0.0025; // -0.25
+    this.far = 0.050; // 0.030
+    this.fov = (3.14 / 4);
   }
 }

@@ -1,5 +1,6 @@
 package scn;
 
+import hxd.snd.Channel;
 import en.Tree;
 import en.Player;
 import particles.Snow2D;
@@ -51,6 +52,8 @@ class Level extends dn.Process {
   public var player:Player;
 
   public var data:LDTkProj_Level;
+  // Level Music
+  public var music:Channel;
 
   public var objects:Group<Entity>;
 
@@ -64,10 +67,17 @@ class Level extends dn.Process {
   }
 
   public function setup() {
+    setupMusic();
     setupGroups();
     setupEntities();
     setupCollectibles();
     setupSnow();
+  }
+
+  public function setupMusic() {
+    if (music == null) {
+      music = hxd.Res.music.Blue_Space_v0_96.play(true);
+    }
   }
 
   public function setupGroups() {
@@ -133,5 +143,17 @@ class Level extends dn.Process {
       invalidated = false;
       render();
     }
+  }
+
+  override function onDispose() {
+    super.onDispose();
+    player.destroy();
+
+    for (el in objects) {
+      el.destroy();
+    }
+
+    music.stop();
+    music = null;
   }
 }

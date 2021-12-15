@@ -1,3 +1,5 @@
+# Snow Drift - KinoCreatesGames
+
 # About
 
 Base structure for my games, using **Heaps** framework (https://heaps.io) and **Haxe** language (https://haxe.org).
@@ -27,3 +29,5 @@ If you need some extra "advanced features", you can also give a try to the **adv
 - Create Commons Tire Squal Loop by Audible-Edge (Tom Haigh) - https://opengameart.org/content/car-tire-squeal-skid-loop / http://www.tomhaigh.com/ is licensed under CC BY 3.0 https://creativecommons.org/licenses/by/3.0/
 - Public Domain Engine sounds  by Pauliuw - 
   https://opengameart.org/content/engine-sounds2 is licensed under CC by 0 https://creativecommons.org/publicdomain/zero/1.0/
+- Public Domain Plomo by LushoGames - https://opengameart.org/content/plomo is licensed under CC by 0 https://creativecommons.org/publicdomain/zero/1.0/
+- Creative Commons Blue Space by FoxSynergy - https://opengameart.org/content/blue-space is licensed under  CC by 3.0 https://creativecommons.org/licenses/by/3.0/

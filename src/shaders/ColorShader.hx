@@ -18,9 +18,10 @@ class ColorShader extends ScreenShader {
      */
     @param var color:Vec4;
 
+    @param var strength:Float;
     function fragment() {
       var texColor = texture.get(input.uv);
-      texColor.rgb *= color.rgb;
+      texColor.rgb += (color.rgb * strength);
       pixelColor = texColor;
     }
   }
@@ -29,5 +30,6 @@ class ColorShader extends ScreenShader {
     super();
     this.texture = texture;
     this.color = color;
+    this.strength = 1.;
   }
 }

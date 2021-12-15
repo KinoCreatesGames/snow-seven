@@ -21,6 +21,7 @@ class Boot extends hxd.App {
 
   public var renderer:CustomRenderer;
   public var mode7:ModeSevShader;
+  public var freeze:ColorShader;
 
   #if debug
   var tmodSpeedMul = 1.0;
@@ -45,12 +46,16 @@ class Boot extends hxd.App {
     renderer = new CustomRenderer();
     s3d.renderer = renderer;
     new Main(s2d);
-    var ground = hxd.Res.textures.TestTrack.toTexture();
+    var ground = hxd.Res.textures.Mario.toTexture();
     ground.wrap = Repeat;
-    var sky = hxd.Res.textures.SkyTexTwo.toTexture();
+    var sky = hxd.Res.textures.NightSky.toTexture();
     sky.wrap = Repeat;
     mode7 = new ModeSevShader(ground);
     mode7.skyTexture = sky;
+
+    var finalTex = new Texture(engine.width, engine.height, [Target]);
+    freeze = new ColorShader(Vector.fromColor(0xaaffff), finalTex);
+    freeze.strength = .4;
     onResize();
   }
 
@@ -118,7 +123,10 @@ class Boot extends hxd.App {
     // shader.worldPos.x -= 0.01;
     ScreenFx.run(shader, compShader.textures, 0);
 
+    ScreenFx.run(compShader, freeze.texture, 0);
     // Compsite for all textures passed into the texture array
-    new ScreenFx(compShader).render();
+    // Color Screen
+
+    new ScreenFx(freeze).render();
   }
 }

@@ -1,5 +1,6 @@
 package en;
 
+import shaders.ColorShader;
 import hxd.snd.Channel;
 import h2d.col.Bounds;
 import particles.Drift2D;
@@ -23,6 +24,12 @@ class Player extends Entity {
     return Boot.ME.mode7;
   }
 
+  public var freeze(get, null):ColorShader;
+
+  inline function get_freeze() {
+    return Boot.ME.freeze;
+  }
+
   /**
    * Vertical speed for moving 
    * within the space quickly.
@@ -38,7 +45,7 @@ class Player extends Entity {
 
   public static inline var MAX_SPEED:Float = 0.0015;
 
-  public static inline var SNOW_AMT:Float = 1;
+  public static inline var SNOW_AMT:Float = 0.5;
 
   /**
    * Amount of snow 
@@ -52,8 +59,13 @@ class Player extends Entity {
    */
   public var snowAccum:Float;
 
+  /**
+   * Shader Parameters
+   */
   public var initialFov:Float;
+
   public var initialFar:Float;
+  public var initialFreeze:Float;
 
   /**
    * Rotation angle for when the vehicle moves
@@ -135,6 +147,7 @@ class Player extends Entity {
     angDir = new Point(0, 1);
     initialFov = mode7.fov;
     initialFar = mode7.far;
+    initialFreeze = freeze.strength;
     snowAccum = 0.0;
     acceleration = 0;
   }
@@ -144,7 +157,7 @@ class Player extends Entity {
     var shadowT = hxd.Res.img.shadow.toTile();
     shadowG.beginTileFill(0, 0, 1, 1, shadowT);
     shadowG.drawRect(0, 0, 32, 32);
-    shadowG.scale(2);
+    // shadowG.scale(2);
     shadowG.endFill();
     shadowG.blendMode = Alpha;
     shadowG.alpha = 0.7;
@@ -152,7 +165,7 @@ class Player extends Entity {
     var t = hxd.Res.img.ship.toTile();
     g.beginTileFill(0, 0, 1, 1, t);
     g.drawRect(0, 0, 32, 32);
-    g.scale(2);
+    // g.scale(2);
     g.endFill();
     var gDrift = new h2d.Graphics(spr);
     gDrift.beginFill(0, 0);
@@ -247,6 +260,9 @@ class Player extends Entity {
    * mechanics within the game.
    */
   public function handleEffects() {
+    // Snow Accumulate ScreenFx
+    freeze.strength = initialFreeze * snowAccum;
+
     if (acceleration > 0 && !isDrifting) {
       if (engineSound == null || engineSound.isReleased()) {
         engineSound = hxd.Res.sound.engine_sound.play(true);
@@ -262,7 +278,7 @@ class Player extends Entity {
       driftOver = false;
 
       if (driftSound == null || driftSound.isReleased()) {
-        driftSound = hxd.Res.sound.tire_squal_loop.play(true);
+        driftSound = hxd.Res.sound.tire_squal_loop.play(true, 0.5);
       }
     }
 
@@ -285,7 +301,7 @@ class Player extends Entity {
       snowAccum = M.fclamp(snowAccum, 0, 1);
       if (isDrifting) {
         // trace('is drifting');
-        snowAccum -= (SNOW_AMT * dt) / 15;
+        snowAccum -= (SNOW_AMT * dt) / 10;
         snowAccum = M.fclamp(snowAccum, 0, 1);
       } else {
         // trace('not drifting');
@@ -310,6 +326,8 @@ class Player extends Entity {
       if (right) {
         var ang = rotAngle * dt;
         handleDrifting(drift, ang);
+        // mode7.near -= (0.1 * dt);
+        // trace(mode7.near);
       }
 
       if (accl) {
