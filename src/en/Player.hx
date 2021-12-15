@@ -1,5 +1,6 @@
 package en;
 
+import particles.Dust2D;
 import shaders.ColorShader;
 import hxd.snd.Channel;
 import h2d.col.Bounds;
@@ -80,6 +81,9 @@ class Player extends Entity {
 
   public var isAccelerating:Bool;
 
+  // Dust Controls
+  public var dustParticles:Dust2D;
+
   // Drifting Controls
   public var driftParticles:Drift2D;
   public var driftOver = false;
@@ -156,15 +160,17 @@ class Player extends Entity {
     var shadowG = new h2d.Graphics(spr);
     var shadowT = hxd.Res.img.shadow.toTile();
     shadowG.beginTileFill(0, 0, 1, 1, shadowT);
-    shadowG.drawRect(0, 0, 32, 32);
+    var size = 32;
+    shadowG.drawRect(0, 0, size, size);
     // shadowG.scale(2);
     shadowG.endFill();
     shadowG.blendMode = Alpha;
     shadowG.alpha = 0.7;
+
     var g = new h2d.Graphics(spr);
     var t = hxd.Res.img.ship.toTile();
     g.beginTileFill(0, 0, 1, 1, t);
-    g.drawRect(0, 0, 32, 32);
+    g.drawRect(0, 0, size, size);
     // g.scale(2);
     g.endFill();
     var gDrift = new h2d.Graphics(spr);
@@ -172,7 +178,10 @@ class Player extends Entity {
     gDrift.drawRect(-100, -100, Game.ME.w(), Game.ME.h());
     gDrift.endFill();
     driftParticles = new Drift2D(gDrift, hxd.Res.img.drift.toTexture());
-    driftParticles.x += 32;
+    driftParticles.x += size;
+    dustParticles = new Dust2D(gDrift);
+    dustParticles.y += (size - 4);
+    dustParticles.x += (size / 2);
   }
 
   override function update() {
@@ -293,6 +302,7 @@ class Player extends Entity {
 
   public function updateParticles() {
     driftParticles.drift.enable = isDrifting;
+    dustParticles.dust.enable = acceleration > 0;
   }
 
   public function updateSnow() {
