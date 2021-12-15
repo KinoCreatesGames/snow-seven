@@ -66,6 +66,9 @@ class Player extends Entity {
 
   public var acceleration:Float;
 
+  public var isAccelerating:Bool;
+
+  // Drifting Controls
   public var driftParticles:Drift2D;
   public var driftOver = false;
 
@@ -76,13 +79,13 @@ class Player extends Entity {
    */
   public var driftMultiplier:Float;
 
-  // Drifting Controls
   public var isDrifting(get, null):Bool;
 
   public var score:Int;
 
   // Sounds
   public var driftSound:Channel;
+  public var engineSound:Channel;
 
   public inline function get_isDrifting() {
     return !moveDir.equals(driftDir);
@@ -238,7 +241,23 @@ class Player extends Entity {
     return bBox.contains(normLoc) || bBoxFlip.contains(normLoc);
   }
 
+  /**
+   * Handles the audio effects
+   * along with anything else related to the drifting
+   * mechanics within the game.
+   */
   public function handleEffects() {
+    if (acceleration > 0 && !isDrifting) {
+      if (engineSound == null || engineSound.isReleased()) {
+        engineSound = hxd.Res.sound.engine_sound.play(true);
+      }
+    }
+
+    if (acceleration <= 0) {
+      if (engineSound != null) {
+        engineSound.stop();
+      }
+    }
     if (isDrifting) {
       driftOver = false;
 
