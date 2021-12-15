@@ -38,6 +38,7 @@ class Dust2D extends Particles {
     dust.gravity = 200;
     dust.gravityAngle = 0;
     dust.life = .25;
+    dust.lifeRand = .5;
     dust.enable = false;
   }
 }
