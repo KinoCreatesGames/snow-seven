@@ -238,7 +238,7 @@ class Level extends dn.Process {
     player.dispose();
 
     snow.disable();
-    snow = null;
+    // snow = null;
 
     for (el in objects) {
       el.destroy();
