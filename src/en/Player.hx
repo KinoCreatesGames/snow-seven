@@ -193,6 +193,7 @@ class Player extends Entity {
     updateParticles();
     updateSnow();
     updateControls();
+    updateCollisions();
   }
 
   public function updateSounds() {}
@@ -353,8 +354,7 @@ class Player extends Entity {
       }
     }
     if (!accl) {
-      acceleration = M.fclamp(acceleration - (DECEL_SPEED * dt * 0.3), 0.0,
-        cappedSpeed);
+      decelerate(cappedSpeed);
     }
     var topSpeed = acceleration;
     mode7.worldPos.x += (moveDir.x * topSpeed);
@@ -363,6 +363,22 @@ class Player extends Entity {
     var narrowing = M.fclamp((topSpeed / MAX_SPEED) * 0.3, 0, 0.3);
     mode7.far = initialFar * (1 + narrowing * 1.3);
     mode7.fov = (initialFov * (1 + narrowing));
+  }
+
+  public function updateCollisions() {
+    var cappedSpeed = MAX_SPEED * (1 - (snowAccum * 0.5));
+    if (level != null) {
+      var wall = level.isWall(mode7.worldPos.x, mode7.worldPos.y);
+      if (wall) {
+        // Decelerate
+        decelerate(cappedSpeed);
+      }
+    }
+  }
+
+  public function decelerate(cappedSpeed) {
+    acceleration = M.fclamp(acceleration - (DECEL_SPEED * dt * 0.3), 0.0,
+      cappedSpeed);
   }
 
   public function handleDrifting(drift, angle:Float) {

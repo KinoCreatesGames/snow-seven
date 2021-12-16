@@ -1,5 +1,9 @@
 package scn;
 
+import h2d.col.Point;
+import h3d.Vector;
+import h2d.col.PixelsCollider;
+import hxd.Pixels;
 import hxd.snd.Channel;
 import en.Tree;
 import en.Player;
@@ -57,6 +61,32 @@ class Level extends dn.Process {
 
   public var objects:Group<Entity>;
 
+  // Level Collision Below
+
+  /**
+   * Collision Mapping Using a texture
+   * Color Map
+   * #4d5061 - Wall Collision Check
+   */
+  public var collisionMap:h3d.mat.Texture;
+
+  /**
+   * Wall collision check
+   */
+  public var wallCol:Int = 0x4d5061;
+
+  /**
+   * Road collision check
+   */
+  public var roadCol:Int = 0xffffff;
+
+  /**
+   * Actual pixels used in the colission 
+   * checking on the map to determine
+   * what's road / what's  not road.
+   */
+  public var collisionPixels:Pixels;
+
   public function new(?level:LDTkProj_Level) {
     super(Game.ME);
     createRootInLayers(Game.ME.scroller, Const.DP_BG);
@@ -67,11 +97,20 @@ class Level extends dn.Process {
   }
 
   public function setup() {
+    setupPixels();
     setupMusic();
     setupGroups();
     setupEntities();
     setupCollectibles();
     setupSnow();
+  }
+
+  public function setupPixels() {
+    // Track Map Collision and pixel upload
+    collisionMap = hxd.Res.textures.TestTrackMap.toTexture();
+    // trace(collisionMap.mipLevels);
+    collisionPixels = collisionMap.capturePixels();
+    // collisionMap.uploadPixels(collisionPixels);
   }
 
   public function setupMusic() {
@@ -121,6 +160,39 @@ class Level extends dn.Process {
     invalidated = true;
   }
 
+  // Collision Detection and also checking the texture map
+
+  public function isWall(x:Float, y:Float) {
+    // Grab World Pos and convert to map position
+    return isPixelCollide(x, y, wallCol);
+  }
+
+  public function isRoad(x:Float, y:Float) {
+    return isPixelCollide(x, y, roadCol);
+  }
+
+  /**
+   * Takes the world position in floating point
+   * compares to the pixel coordinate 
+   * @param x 
+   * @param y 
+   */
+  public function isPixelCollide(x:Float, y:Float, color:Int) {
+    var mode = Boot.ME.mode7;
+    var width = mode.texture.width;
+    var height = mode.texture.height;
+    var x = (mode.worldPos.x % 1.);
+    var y = (mode.worldPos.y % 1.);
+    var pX = Std.int(x * width);
+    var pY = Std.int(y * height);
+    var colMapColor = (collisionPixels.getPixelF(pX, pY));
+    var vec = Vector.fromColor(color);
+    // Note that the alpha channel coming from the pixels is 1
+    // Ends up being 0 from the vector from color we have to account for that;
+    vec.a = 1.;
+    return vec.equals(colMapColor);
+  }
+
   function render() {
     // Placeholder level render
     // root.removeChildren();
@@ -134,6 +206,21 @@ class Level extends dn.Process {
     //       g.beginFill(Color.randomColor(rnd(0, 1), 0.5, 0.4));
     //     g.drawRect(cx * Const.GRID, cy * Const.GRID, Const.GRID, Const.GRID);
     //   }
+  }
+
+  override function update() {
+    super.update();
+    handlePause();
+  }
+
+  public function handlePause() {
+    // Pause
+    if (game.ca.isKeyboardPressed(K.ESCAPE)) {
+      // hxd.Res.sound.pause_in.play(); - issue playing sound now
+      // bgm.pause = true;
+      this.pause();
+      new Pause();
+    }
   }
 
   override function postUpdate() {
