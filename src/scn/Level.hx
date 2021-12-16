@@ -97,12 +97,17 @@ class Level extends dn.Process {
   }
 
   public function setup() {
+    setupHUD();
     setupPixels();
     setupMusic();
     setupGroups();
     setupEntities();
     setupCollectibles();
     setupSnow();
+  }
+
+  public function setupHUD() {
+    Game.ME.hud.show();
   }
 
   public function setupPixels() {
@@ -235,6 +240,8 @@ class Level extends dn.Process {
   override function onDispose() {
     super.onDispose();
     // Destroy / Dispose all objects
+    // Hide the HUD
+    Game.ME.hud.hide();
     player.dispose();
 
     snow.disable();

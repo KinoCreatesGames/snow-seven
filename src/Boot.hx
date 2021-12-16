@@ -94,7 +94,7 @@ class Boot extends hxd.App {
   override function render(e:Engine) {
     // Grab Render Texture for the 2D scene so that can make modifications
     // Level Rendering
-    if (Game.ME != null && Game.ME.level != null) {
+    if (Game.ME != null && Game.ME.level != null && !Game.ME.level.destroyed) {
       var level = Game.ME.level;
       var shader = mode7;
       var renderTarget = new Texture(engine.width, engine.height, [Target]);
