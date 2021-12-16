@@ -67,6 +67,10 @@ class Level extends dn.Process {
    * Collision Mapping Using a texture
    * Color Map
    * #4d5061 - Wall Collision Check
+   * #5c80bc  - Snow Accumulation?
+   * #110f06 - Road Check?
+   * #cdd1c4 - Road Check
+   * #30323d - Rough spots Check
    */
   public var collisionMap:h3d.mat.Texture;
 

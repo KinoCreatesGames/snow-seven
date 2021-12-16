@@ -87,4 +87,12 @@ class TextureGauge {
 
     invalidated = false;
   }
+
+  public function hide() {
+    root.visible = false;
+  }
+
+  public function show() {
+    root.visible = true;
+  }
 }

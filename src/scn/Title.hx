@@ -34,6 +34,8 @@ class Title extends dn.Process {
     complete = false;
     mask = new h2d.Bitmap(h2d.Tile.fromColor(0x0, 1, 1, 0.6), root);
     root.under(mask);
+    var bgTile = hxd.Res.img.bg.toTile();
+    bg = new h2d.Bitmap(bgTile, root);
 
     // Play music
 
@@ -231,6 +233,10 @@ class Title extends dn.Process {
       var h = M.ceil(h());
       mask.scaleX = w;
       mask.scaleY = h;
+    }
+    if (bg != null) {
+      bg.scaleX = w() / bg.tile.width;
+      bg.scaleY = h() / bg.tile.height;
     }
     title.x = (w() * 0.5 - (title.getSize().width * 0.5));
     title.y = (h() * 0.5 - (h() / 3));

@@ -97,7 +97,6 @@ class Boot extends hxd.App {
     if (Game.ME != null && Game.ME.level != null && !Game.ME.level.destroyed) {
       var level = Game.ME.level;
       var shader = mode7;
-      var renderTarget = new Texture(engine.width, engine.height, [Target]);
       // Composite Shader
       var compShader = new CompositeShader(new TextureArray(engine.width,
         engine.height, 3, [Target]));

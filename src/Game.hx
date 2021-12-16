@@ -1,3 +1,4 @@
+import scn.Title;
 import dn.Process;
 import hxd.Key;
 import dn.heaps.Controller.ControllerAccess;
@@ -44,10 +45,11 @@ class Game extends dn.Process {
     scroller.filter = new h2d.filter.ColorMatrix(); // force rendering for pixel perfect
 
     camera = new Camera();
-    level = new Level(proj.all_levels.Level_0);
+    new Title();
+    // level = new Level(proj.all_levels.Level_0);
     fx = new Fx();
     hud = new ui.Hud();
-    // hud.hide();
+    hud.hide();
 
     Process.resizeAll();
     trace(Lang.t._("Game is ready."));
