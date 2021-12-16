@@ -399,4 +399,10 @@ class Player extends Entity {
       driftDir.lerp(driftDir, moveDir, 1);
     }
   }
+
+  override inline function dispose() {
+    driftParticles.dispose();
+    dustParticles.dispose();
+    super.destroy();
+  }
 }

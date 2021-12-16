@@ -41,4 +41,9 @@ class Dust2D extends Particles {
     dust.lifeRand = .5;
     dust.enable = false;
   }
+
+  public function dispose() {
+    dust.enable = false;
+    dust = null;
+  }
 }

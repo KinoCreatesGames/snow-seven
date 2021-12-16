@@ -34,4 +34,9 @@ class Drift2D extends Particles {
     drift.lifeRand = 1;
     drift.enable = false;
   }
+
+  public function dispose() {
+    drift.enable = false;
+    drift = null;
+  }
 }

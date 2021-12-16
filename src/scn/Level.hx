@@ -234,7 +234,11 @@ class Level extends dn.Process {
 
   override function onDispose() {
     super.onDispose();
-    player.destroy();
+    // Destroy / Dispose all objects
+    player.dispose();
+
+    snow.disable();
+    snow = null;
 
     for (el in objects) {
       el.destroy();
