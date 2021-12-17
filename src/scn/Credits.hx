@@ -42,7 +42,7 @@ class Credits extends dn.Process {
     win.backgroundTile = h2d.Tile.fromColor(0xff0000, width, 100, 0);
     win.borderHeight = 6;
     win.borderWidth = 6;
-    win.verticalSpacing = 16;
+    win.verticalSpacing = 12;
 
     win.layout = Vertical;
     win.verticalAlign = FlowAlign.Middle;
@@ -62,7 +62,7 @@ class Credits extends dn.Process {
     assets.center();
 
     var jd = new h2d.Text(Assets.fontMedium, win);
-    jd.text = Lang.t._('JDSherbert - Music');
+    jd.text = Lang.t._('JDSherbert - Music - Refreshing Dawn');
     jd.center();
 
     var tom = new h2d.Text(Assets.fontMedium, win);
@@ -82,7 +82,7 @@ class Credits extends dn.Process {
     foxy.center();
 
     var thanks = new h2d.Text(Assets.fontMedium, win);
-    thanks.text = Lang.t._('Thank You For Playing');
+    thanks.text = Lang.t._('Thank You For Playing!');
     thanks.center();
 
     // var pixelS = new h2d.Text(Assets.fontMedium, win);
