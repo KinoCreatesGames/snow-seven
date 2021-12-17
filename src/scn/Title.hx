@@ -14,6 +14,7 @@ class Title extends dn.Process {
   }
 
   public var complete:Bool;
+  public var creditComplete:Bool;
   public var title:h2d.Text;
   public var win:h2d.Flow;
   public var bgm:Channel;
@@ -149,8 +150,7 @@ class Title extends dn.Process {
         bgm.stop();
       }
       hxd.Res.sound.confirm.play();
-      this.destroy();
-      new Credits();
+      creditComplete = true;
     }
 
     #if hl
@@ -187,14 +187,28 @@ class Title extends dn.Process {
   override public function update() {
     super.update();
     updateMouseToControls();
+
+    // Title Transition
     if (complete && transition == null) {
       transition = new FadeToBlack();
     }
 
+    // Credit Transition
+    if (creditComplete && transition == null) {
+      transition = new FadeToBlack();
+    }
+
     if (transition != null && transition.complete) {
-      this.destroy();
-      transition.destroy();
-      new Instructions();
+      if (complete) {
+        this.destroy();
+        transition.destroy();
+        new Instructions();
+      }
+      if (creditComplete) {
+        this.destroy();
+        transition.destroy();
+        new Credits();
+      }
     }
   }
 
