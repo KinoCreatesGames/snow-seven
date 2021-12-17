@@ -308,7 +308,7 @@ class Player extends Entity {
 
   public function updateSnow() {
     if (acceleration > 0) {
-      snowAccum += (SNOW_AMT * dt) / 25;
+      snowAccum += (SNOW_AMT * dt) / 20;
       snowAccum = M.fclamp(snowAccum, 0, 1);
       if (isDrifting) {
         // trace('is drifting');

@@ -30,6 +30,8 @@ class Game extends dn.Process {
    */
   public var proj:LDTkProj;
 
+  public var resumeGameOver:Bool;
+
   public function new() {
     super(Main.ME);
     ME = this;
@@ -37,6 +39,7 @@ class Game extends dn.Process {
     ca.setLeftDeadZone(0.2);
     ca.setRightDeadZone(0.2);
     createRootInLayers(Main.ME.root, Const.DP_BG);
+    resumeGameOver = false;
 
     proj = new LDTkProj();
 

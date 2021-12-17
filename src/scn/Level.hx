@@ -219,6 +219,7 @@ class Level extends dn.Process {
 
   override function update() {
     super.update();
+    handleGameOver();
     handlePause();
   }
 
@@ -229,6 +230,13 @@ class Level extends dn.Process {
       // bgm.pause = true;
       this.pause();
       new Pause();
+    }
+  }
+
+  public function handleGameOver() {
+    if (player.snowAccum >= 1) {
+      this.pause();
+      new GameOver();
     }
   }
 
