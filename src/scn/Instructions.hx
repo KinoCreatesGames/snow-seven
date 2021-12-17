@@ -29,6 +29,7 @@ class Instructions extends dn.Process {
     ca = Main.ME.controller.createAccess('instructions');
 
     setupInstructions();
+    dn.Process.resizeAll();
   }
 
   /**
@@ -53,11 +54,13 @@ class Instructions extends dn.Process {
     howTo.center();
 
     var instr = new h2d.Text(Assets.fontMedium, win);
-    instr.maxWidth = Std.int(w() / 3);
+    // instr.maxWidth = Std.int(w() / 4);
     instr.text = 'It\'s freezing outside. 
-    Keep your wheels and tires warm this Holiday season by drifting on the track.
-    If the snow builds up (bottom left corner) It\'s game over!
+    Keep your wheels and tires warm this 
+    holiday season by drifting on the track. 
+    If the snow builds up (bottom left corner) It\'s game over! 
     Good luck!';
+    instr.center();
   }
 
   override public function onResize() {
