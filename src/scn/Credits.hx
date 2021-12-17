@@ -1,5 +1,6 @@
 package scn;
 
+import h2d.Text;
 import ui.transition.FadeToBlack;
 import hxd.snd.Channel;
 import h2d.Flow.FlowAlign;
@@ -55,9 +56,35 @@ class Credits extends dn.Process {
     var kino = new h2d.Text(Assets.fontMedium, win);
     kino.text = Lang.t._('Kino - Game Design');
     kino.center();
-    // var jd = new h2d.Text(Assets.fontMedium, win);
-    // jd.text = Lang.t._('JDSherbert - Music');
-    // jd.center();
+
+    var assets = new h2d.Text(Assets.fontMedium, win);
+    assets.text = Lang.t._('Creative Commons Assets');
+    assets.center();
+
+    var jd = new h2d.Text(Assets.fontMedium, win);
+    jd.text = Lang.t._('JDSherbert - Music');
+    jd.center();
+
+    var tom = new h2d.Text(Assets.fontMedium, win);
+    tom.text = Lang.t._('Audible Edge - Tire Squall Audio Asset');
+    tom.center();
+
+    var pauli = new h2d.Text(Assets.fontMedium, win);
+    pauli.text = Lang.t._('Pauliuw - Engine Audio Asset');
+    pauli.center();
+
+    var lusho = new h2d.Text(Assets.fontMedium, win);
+    lusho.text = Lang.t._('LushoGame - Music (Plomo)');
+    lusho.center();
+
+    var foxy = new h2d.Text(Assets.fontMedium, win);
+    foxy.text = Lang.t._('FoxSynergy - Music (Blue Space)');
+    foxy.center();
+
+    var thanks = new h2d.Text(Assets.fontMedium, win);
+    thanks.text = Lang.t._('Thank You For Playing');
+    thanks.center();
+
     // var pixelS = new h2d.Text(Assets.fontMedium, win);
     // pixelS.text = Lang.t._('pixelsphere.org/The Cynic Project');
     // pixelS.center();

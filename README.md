@@ -26,6 +26,8 @@ If you need some extra "advanced features", you can also give a try to the **adv
 
 ## Audio
 
+- Joshua "JDSherbert" Herbert - Refreshing Dawn
+
 - Create Commons Tire Squal Loop by Audible-Edge (Tom Haigh) - https://opengameart.org/content/car-tire-squeal-skid-loop / http://www.tomhaigh.com/ is licensed under CC BY 3.0 https://creativecommons.org/licenses/by/3.0/
 - Public Domain Engine sounds  by Pauliuw - 
   https://opengameart.org/content/engine-sounds2 is licensed under CC by 0 https://creativecommons.org/publicdomain/zero/1.0/

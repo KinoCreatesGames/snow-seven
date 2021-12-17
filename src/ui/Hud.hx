@@ -120,9 +120,11 @@ class Hud extends dn.Process {
 
   public function hide() {
     flow.visible = false;
+    snowGauge.hide();
   }
 
   public function show() {
     flow.visible = true;
+    snowGauge.show();
   }
 }

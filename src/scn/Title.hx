@@ -39,7 +39,7 @@ class Title extends dn.Process {
 
     // Play music
 
-    // bgm = hxd.Res.music.juhani_title.play(true);
+    bgm = hxd.Res.music.JDSherbert___Minigame_Music_Pack___Refreshing_Dawn.play(true);
     #if debug
     // if (bgm != null) {
     //   bgm.stop();
