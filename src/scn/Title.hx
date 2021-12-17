@@ -1,5 +1,6 @@
 package scn;
 
+import ui.transition.FadeToBlack;
 import hxd.SceneEvents;
 import dn.heaps.Controller.ControllerAccess;
 import hxd.snd.Channel;
@@ -22,6 +23,7 @@ class Title extends dn.Process {
   public var events:SceneEvents;
   public var selectionIndex:Int = 0;
   public var optionList:Array<h2d.Interactive>;
+  public var transition:FadeToBlack;
 
   public function new() {
     super(Game.ME);
@@ -185,9 +187,14 @@ class Title extends dn.Process {
   override public function update() {
     super.update();
     updateMouseToControls();
-    if (complete) {
+    if (complete && transition == null) {
+      transition = new FadeToBlack();
+    }
+
+    if (transition != null && transition.complete) {
+      this.destroy();
+      transition.destroy();
       new Instructions();
-      destroy();
     }
   }
 
