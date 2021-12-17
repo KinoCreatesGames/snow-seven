@@ -186,10 +186,7 @@ class Title extends dn.Process {
     super.update();
     updateMouseToControls();
     if (complete) {
-      // var allText = depot.DepotData.Dialogue_Intro.text.map((text) -> text.str);
-      // new IntroScene(() -> {
-      Game.ME.startInitialGame();
-      // }, allText);
+      new Instructions();
       destroy();
     }
   }
