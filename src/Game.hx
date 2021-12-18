@@ -55,7 +55,7 @@ class Game extends dn.Process {
     hud.hide();
 
     Process.resizeAll();
-    trace(Lang.t._("Game is ready."));
+    // trace(Lang.t._("Game is ready."));
   }
 
   /**
@@ -196,7 +196,7 @@ class Game extends dn.Process {
       #end
 
       // Restart
-      if (ca.selectPressed()) Main.ME.startGame();
+      // if (ca.selectPressed()) Game.ME.reloadCurrentLevel();
     }
   }
 }

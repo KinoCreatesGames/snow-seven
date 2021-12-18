@@ -1,5 +1,6 @@
 package scn;
 
+import shaders.ModeSevShader;
 import h2d.col.Point;
 import h3d.Vector;
 import h2d.col.PixelsCollider;
@@ -48,6 +49,30 @@ class Level extends dn.Process {
   inline function get_pxHei()
     return cHei * Const.GRID;
 
+  public var mode(get, null):ModeSevShader;
+
+  public inline function get_mode():ModeSevShader {
+    return Boot.ME.mode7;
+  }
+
+  /**
+   * X Scale
+   */
+  public var xColScale(get, null):Int;
+
+  public inline function get_xColScale() {
+    return Std.int(mode.texture.width / collisionMap.width);
+  }
+
+  /**
+   * Y Scale
+   */
+  public var yColScale(get, null):Int;
+
+  public inline function get_yColScale() {
+    return Std.int(mode.texture.height / collisionMap.height);
+  }
+
   var invalidated = true;
 
   // Game specific variables
@@ -67,7 +92,7 @@ class Level extends dn.Process {
    * Collision Mapping Using a texture
    * Color Map
    * #4d5061 - Wall Collision Check
-   * #5c80bc  - Snow Accumulation?
+   * #5c80bc  - Player Start Position
    * #110f06 - Road Check?
    * #cdd1c4 - Road Check
    * #30323d - Rough spots Check
@@ -78,6 +103,8 @@ class Level extends dn.Process {
    * Wall collision check
    */
   public var wallCol:Int = 0x4d5061;
+
+  public var playerPos:Int = 0x5c80bc;
 
   /**
    * Road collision check
@@ -116,7 +143,7 @@ class Level extends dn.Process {
 
   public function setupPixels() {
     // Track Map Collision and pixel upload
-    collisionMap = hxd.Res.textures.TestTrackMap.toTexture();
+    collisionMap = hxd.Res.textures.FinalTrackColMap_png.toTexture();
     // trace(collisionMap.mipLevels);
     collisionPixels = collisionMap.capturePixels();
     // collisionMap.uploadPixels(collisionPixels);
@@ -139,6 +166,13 @@ class Level extends dn.Process {
 
   public function createPlayer() {
     player = new Player(6, 10);
+    // Get World Pos
+    var pos = findPixel(playerPos);
+    if (pos != null) {
+      // Convert to world pos for texture
+      mode.worldPos.x = ((pos.x * xColScale) / mode.texture.width);
+      mode.worldPos.y = ((pos.y * yColScale) / mode.texture.height);
+    }
   }
 
   public function createObjects() {
@@ -180,6 +214,29 @@ class Level extends dn.Process {
     return isPixelCollide(x, y, roadCol);
   }
 
+  public function isPlayer(x:Float, y:Float) {
+    return isPixelCollide(x, y, playerPos);
+  }
+
+  /**
+   * Returns the x, y coordinate 
+   * in integer x, y texture space  
+   * @param color 
+   */
+  public function findPixel(color:Int) {
+    var vec = Vector.fromColor(color);
+    vec.a = 1.;
+    for (x in 0...collisionPixels.width) {
+      for (y in 0...collisionMap.height) {
+        var colMapColor = (collisionPixels.getPixelF(x, y));
+        if (vec.equals(colMapColor)) {
+          return new Vector(x, y);
+        }
+      }
+    }
+    return null;
+  }
+
   /**
    * Takes the world position in floating point
    * compares to the pixel coordinate 
@@ -187,13 +244,12 @@ class Level extends dn.Process {
    * @param y 
    */
   public function isPixelCollide(x:Float, y:Float, color:Int) {
-    var mode = Boot.ME.mode7;
     var width = mode.texture.width;
     var height = mode.texture.height;
     var x = (mode.worldPos.x % 1.);
     var y = (mode.worldPos.y % 1.);
-    var pX = Std.int(x * width);
-    var pY = Std.int(y * height);
+    var pX = Std.int((x * width) / xColScale);
+    var pY = Std.int((y * height) / yColScale);
     var colMapColor = (collisionPixels.getPixelF(pX, pY));
     var vec = Vector.fromColor(color);
     // Note that the alpha channel coming from the pixels is 1

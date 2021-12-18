@@ -53,11 +53,11 @@ class Pause extends dn.Process {
       resumeGame();
     }
 
-    var restart = new TxtBtn(win.outerWidth, Lang.t._('Restart'), win);
-    restart.center();
-    restart.onClick = (event) -> {
-      restartLevel();
-    }
+    // var restart = new TxtBtn(win.outerWidth, Lang.t._('Restart'), win);
+    // restart.center();
+    // restart.onClick = (event) -> {
+    //   restartLevel();
+    // }
 
     var quit = new TxtBtn(win.outerWidth, Lang.t._('To Title'), win);
     quit.center();

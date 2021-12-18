@@ -74,15 +74,15 @@ class ModeSevShader extends ScreenShader {
         (farR.y - nearR.y) / depth + nearR.y);
 
       // sample X
-      var sample = vec2((end.x - start.x) * uv.x + start.x,
+      var sevenSample = vec2((end.x - start.x) * uv.x + start.x,
         (end.y - start.y) * uv.x + start.y);
       if (uv.y > horizon) {
-        result = sample;
+        result = sevenSample;
       }
 
       var texColor = texture.get(result);
       if (uv.y < horizon) {
-        result.y = (1 - sample.y);
+        result.y = (1 - sevenSample.y);
         texColor = skyTexture.get(vec2(uv.x, uv.y / .4));
       }
 
@@ -96,7 +96,7 @@ class ModeSevShader extends ScreenShader {
     this.worldPos = new Vector(0.35, .3);
     this.viewA = (90 * 3.14) / 180;
     this.near = -0.0025; // -0.25
-    this.far = 0.050; // 0.030
+    this.far = 0.040; // 0.030
     this.fov = (3.14 / 4);
   }
 }

@@ -66,27 +66,12 @@ class GameOver extends dn.Process {
   }
 
   inline function setupOptions() {
-    var options = [Lang.t._('Continue'), Lang.t._('To Title')];
+    var options = [Lang.t._('To Title')];
     for (index in 0...options.length) {
       var text = options[index];
       var optInt = setupOption(text);
       switch (index) {
         case 0:
-          //  Continue
-          optInt.onClick = (event) -> {
-            // Restart from previous Level and destroy this game over scene
-            var level = Game.ME.level;
-            if (level != null) {
-              Game.ME.resumeGameOver = true;
-              ct.releaseExclusivity();
-              Game.ME.resume();
-              Game.ME.level.destroy();
-              Game.ME.startLevel(Assets.projData.getLevel(level.data.uid));
-              hxd.Res.sound.confirm.play();
-              destroy();
-            }
-          }
-        case 1:
           // To title
           optInt.onClick = (event) -> {
             Game.ME.level.destroy();

@@ -23,7 +23,7 @@ class Snow2D extends Particles {
     snow.texture = tex;
     snow.emitMode = Box;
     isRelative(false);
-    nparts(2500);
+    nparts(250);
     emitDist(Boot.ME.engine.width);
     emitDistY(10);
     emitAngle(0);
@@ -32,7 +32,7 @@ class Snow2D extends Particles {
     speedRand(.8);
     sizeRand(0.2);
     life(5);
-    lifeRand(10);
+    lifeRand(5);
   }
 
   public function disable() {

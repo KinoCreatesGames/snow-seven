@@ -44,7 +44,7 @@ class Player extends Entity {
 
   public static inline var DECEL_SPEED:Float = 0.0025;
 
-  public static inline var MAX_SPEED:Float = 0.0015;
+  public static inline var MAX_SPEED:Float = 0.0010;
 
   public static inline var SNOW_AMT:Float = 0.5;
 
@@ -97,7 +97,14 @@ class Player extends Entity {
 
   public var isDrifting(get, null):Bool;
 
-  public var score:Int;
+  public var score:Int = 0;
+
+  /**
+   * Score increment during the drifting
+   * action, which will be 
+   * added once the drift is over
+   */
+  public var driftScore:Int = 0;
 
   // Sounds
   public var driftSound:Channel;
@@ -151,9 +158,14 @@ class Player extends Entity {
     angDir = new Point(0, 1);
     initialFov = mode7.fov;
     initialFar = mode7.far;
-    initialFreeze = freeze.strength;
+    initialFreeze = 0.4;
     snowAccum = 0.0;
     acceleration = 0;
+    // Set Mode 7 Params
+    mode7.viewA = (90 * 3.14) / 180;
+    mode7.near = -0.0025; // -0.25
+    mode7.far = 0.040; // 0.030
+    mode7.fov = (3.14 / 4);
   }
 
   public function setupCharacter() {
@@ -204,12 +216,20 @@ class Player extends Entity {
    * Core Scoring Mechanisms
    */
   public function updateLevelVariables() {
+    hud.invalidate();
     if (acceleration > 0) {
-      score += Std.int(1 * driftMultiplier);
-      hud.invalidate();
+      score += Std.int(1);
+      if (isDrifting) {
+        // Show HUD
+        hud.driftFlow.visible = true;
+        driftScore += Std.int(1 * driftMultiplier);
+      }
     }
     if (!isDrifting) {
+      score += driftScore;
       driftMultiplier = 1;
+      hud.driftFlow.visible = false;
+      driftScore = 0;
     } else {
       driftMultiplier += 0.1;
     }
@@ -251,16 +271,6 @@ class Player extends Entity {
     var modeTex = mode7.texture;
     var normLoc = new Point((entity.spr.x / modeTex.width),
       (entity.spr.y / modeTex.height));
-
-    // trace(bBox.contains(normLoc));
-    // if (!cd.has('test')) {
-    //   cd.setS('test', 2, () -> {
-    //     trace('Box Information ${bBox.xMin} | ${bBox.xMax}');
-    //     trace('Box x: \n ${bBox.yMin} | ${bBox.yMax}');
-    //     trace('Normalized location ${normLoc.x} ---- ${normLoc.y}');
-    //   });
-    // }
-
     return bBox.contains(normLoc) || bBoxFlip.contains(normLoc);
   }
 
@@ -288,7 +298,7 @@ class Player extends Entity {
       driftOver = false;
 
       if (driftSound == null || driftSound.isReleased()) {
-        driftSound = hxd.Res.sound.tire_squal_loop.play(true, 0.5);
+        driftSound = hxd.Res.sound.tire_squal_loop.play(true, 0.3);
       }
     }
 
@@ -307,12 +317,13 @@ class Player extends Entity {
   }
 
   public function updateSnow() {
+    // Snow Accumulates regardless
+    snowAccum += (SNOW_AMT * dt) / 18;
+    snowAccum = M.fclamp(snowAccum, 0, 1);
     if (acceleration > 0) {
-      snowAccum += (SNOW_AMT * dt) / 20;
-      snowAccum = M.fclamp(snowAccum, 0, 1);
       if (isDrifting) {
         // trace('is drifting');
-        snowAccum -= (SNOW_AMT * dt) / 10;
+        snowAccum -= (SNOW_AMT * dt) / 15;
         snowAccum = M.fclamp(snowAccum, 0, 1);
       } else {
         // trace('not drifting');
@@ -371,6 +382,7 @@ class Player extends Entity {
       var wall = level.isWall(mode7.worldPos.x, mode7.worldPos.y);
       if (wall) {
         // Decelerate
+
         decelerate(cappedSpeed);
       }
     }
@@ -391,18 +403,30 @@ class Player extends Entity {
     } else {
       // When you let go of the button and they're not equal
       // We dampen the drifting angle
-      // driftDir.rotate(angle);
+
       mode7.viewA += angle;
       angDir.rotate(angle);
-      moveDir.lerp(moveDir, angDir, .8);
+
+      moveDir.x = (moveDir.x + .8 * (angDir.x - moveDir.x));
+      moveDir.y = (moveDir.y + .8 * (angDir.y - moveDir.y));
+
       // moveDir.rotate(angle * (1 + (moveDir.)));
-      driftDir.lerp(driftDir, moveDir, 1);
+
+      driftDir.x = (driftDir.x + (moveDir.x - driftDir.x));
+      driftDir.y = (driftDir.y + (moveDir.y - driftDir.y));
     }
   }
 
-  override inline function dispose() {
+  override function dispose() {
+    if (engineSound != null) {
+      engineSound.stop();
+    }
+    if (driftSound != null) {
+      driftSound.stop();
+    }
     driftParticles.dispose();
     dustParticles.dispose();
+    freeze.strength = 0.0;
     super.destroy();
   }
 }

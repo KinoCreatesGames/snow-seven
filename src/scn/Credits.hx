@@ -19,6 +19,7 @@ class Credits extends dn.Process {
 
   public var complete:Bool;
   public var win:h2d.Flow;
+  public var esc:h2d.Text;
   public var transition:FadeToBlack;
 
   public function new() {
@@ -50,6 +51,8 @@ class Credits extends dn.Process {
   }
 
   public function setupText() {
+    esc = new h2d.Text(Assets.fontSmall, root);
+    esc.text = Lang.t._('Escape To Exit');
     var credits = new h2d.Text(Assets.fontLarge, win);
     credits.text = Lang.t._('Credits');
     credits.center();
@@ -98,6 +101,8 @@ class Credits extends dn.Process {
       mask.scaleX = w;
       mask.scaleY = h;
     }
+    esc.x = 16;
+    esc.y = 16;
     win.x = (w() * 0.5 - (win.outerWidth * 0.1));
     win.y = (h() * 0.5 - (win.outerHeight * 0.5));
   }
