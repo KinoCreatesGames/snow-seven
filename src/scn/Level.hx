@@ -310,6 +310,9 @@ class Level extends dn.Process {
     // Destroy / Dispose all objects
     // Hide the HUD
     Game.ME.hud.hide();
+    // Handle Particles
+    player.driftParticles.drift.enable = false;
+    player.dustParticles.dust.enable = false;
     player.dispose();
 
     snow.disable();

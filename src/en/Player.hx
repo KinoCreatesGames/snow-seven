@@ -111,7 +111,7 @@ class Player extends Entity {
   public var engineSound:Channel;
 
   public inline function get_isDrifting() {
-    return !moveDir.equals(driftDir);
+    return !moveDir.equals(driftDir) && acceleration > 0;
   }
 
   // Frustrum for the game using shader information
@@ -134,11 +134,7 @@ class Player extends Entity {
 
   public function new(x:Int, y:Int) {
     super(x, y);
-    // spr.filter = new PixelOutline(0x0, 1);
-
     ct = Main.ME.controller.createAccess('Player');
-    // h2d.Tile.fromColor(0xffaaff);
-
     setup();
   }
 
