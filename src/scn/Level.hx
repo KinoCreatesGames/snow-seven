@@ -187,7 +187,7 @@ class Level extends dn.Process {
 
   public function setupSnow() {
     var snowRoot = Boot.ME.s2d;
-    snow = new Snow2D(snowRoot, hxd.Res.textures.SnowTex.toTexture());
+    snow = new Snow2D(snowRoot, hxd.Res.textures.SnowTexT.toTexture());
   }
 
   /** TRUE if given coords are in level bounds **/

@@ -59,7 +59,8 @@ class Instructions extends dn.Process {
     Keep your wheels and tires warm this 
     holiday season by drifting on the track. 
     If the snow builds up (bottom left corner) It\'s game over! 
-    Good luck!';
+    Good luck!
+    Press Enter';
     instr.center();
   }
 

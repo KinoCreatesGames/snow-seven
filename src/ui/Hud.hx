@@ -66,7 +66,8 @@ class Hud extends dn.Process {
   public function createScore() {
     scoreText = new h2d.Text(Assets.fontSmall, flow);
     scoreText.text = 'Score 0';
-    scoreText.textColor = 0xffa0aa;
+
+    scoreText.textColor = 0xffffff;
   }
 
   public function createDriftMultiplier() {

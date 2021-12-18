@@ -18,7 +18,7 @@ class Snow2D extends Particles {
     // this.x += 200;
     // this.y += 100;
     snow.name = 'snow';
-    snow.blendMode = Alpha;
+    snow.blendMode = AlphaAdd;
     snow.emitLoop = true;
     snow.texture = tex;
     snow.emitMode = Box;

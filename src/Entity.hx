@@ -163,6 +163,7 @@ class Entity {
 
   public function removeEmptyTexture() {
     spr.tile.getTexture().clear(0x0, 1);
+    spr.tile.switchTexture(h2d.Tile.fromColor(0xffffff, 0, 0, 0));
   }
 
   inline function set_dir(v) {

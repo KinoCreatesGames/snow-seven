@@ -134,7 +134,7 @@ class Player extends Entity {
 
   public function new(x:Int, y:Int) {
     super(x, y);
-    spr.filter = new PixelOutline(0x0, 1);
+    // spr.filter = new PixelOutline(0x0, 1);
 
     ct = Main.ME.controller.createAccess('Player');
     // h2d.Tile.fromColor(0xffaaff);
@@ -145,6 +145,7 @@ class Player extends Entity {
   public function setup() {
     setupVars();
     setupCharacter();
+    removeEmptyTexture();
   }
 
   public function setupVars() {

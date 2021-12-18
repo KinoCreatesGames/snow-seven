@@ -21,6 +21,7 @@ class Boot extends hxd.App {
 
   public var renderer:CustomRenderer;
   public var mode7:ModeSevShader;
+  public var comp:CompositeShader;
   public var freeze:ColorShader;
 
   #if debug
@@ -52,6 +53,8 @@ class Boot extends hxd.App {
     sky.wrap = Repeat;
     mode7 = new ModeSevShader(ground);
     mode7.skyTexture = sky;
+    comp = new CompositeShader(new TextureArray(engine.width, engine.height,
+      3, [Target]));
 
     var finalTex = new Texture(engine.width, engine.height, [Target]);
     freeze = new ColorShader(Vector.fromColor(0xaaffff), finalTex);
@@ -97,30 +100,15 @@ class Boot extends hxd.App {
     if (Game.ME != null && Game.ME.level != null && !Game.ME.level.destroyed) {
       var level = Game.ME.level;
       var shader = mode7;
-      // Composite Shader
-      var compShader = new CompositeShader(new TextureArray(engine.width,
-        engine.height, 3, [Target]));
-      engine.pushTarget(compShader.textures, 2);
+      engine.pushTarget(comp.textures, 2);
       engine.clear(0, 1);
 
-      // Disable level snow before render texture screen shader pass
-      Game.ME.scroller.visible = true;
-      level.snow.visible = false;
-      s2d.render(e);
-      engine.popTarget();
-
-      // Dsiable level before rendering snow
-      level.snow.visible = true;
-      Game.ME.scroller.visible = false;
-
-      engine.pushTarget(compShader.textures, 1);
-      engine.clear(0, 1);
       s2d.render(e);
       engine.popTarget();
 
       // Compsite for all textures passed into the texture array
-      ScreenFx.run(shader, compShader.textures, 0);
-      ScreenFx.run(compShader, freeze.texture, 0);
+      ScreenFx.run(shader, comp.textures, 0);
+      ScreenFx.run(comp, freeze.texture, 0);
       // Color Screen
       new ScreenFx(freeze).render();
     } else {
